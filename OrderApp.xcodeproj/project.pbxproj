@@ -40,6 +40,10 @@
 		771F3A112B73E98C009E3B13 /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 771F3A102B73E98C009E3B13 /* FirebaseRemoteConfigSwift */; };
 		771F3A132B73E98C009E3B13 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 771F3A122B73E98C009E3B13 /* FirebaseStorage */; };
 		771F3A152B73E98C009E3B13 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 771F3A142B73E98C009E3B13 /* FirebaseStorageCombine-Community */; };
+		772339C02B75410400FCD882 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772339BF2B75410400FCD882 /* DBManager.swift */; };
+		772339C32B7541A700FCD882 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772339C22B7541A700FCD882 /* Product.swift */; };
+		772339C52B75561300FCD882 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772339C42B75561300FCD882 /* CustomTableViewCell.swift */; };
+		772339C82B7595C900FCD882 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772339C72B7595C900FCD882 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +56,10 @@
 		771F39D72B73E77F009E3B13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		771F39DD2B73E805009E3B13 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		771F3A162B74425B009E3B13 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		772339BF2B75410400FCD882 /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
+		772339C22B7541A700FCD882 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		772339C42B75561300FCD882 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		772339C72B7595C900FCD882 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +119,9 @@
 		771F39C82B73E77D009E3B13 /* OrderApp */ = {
 			isa = PBXGroup;
 			children = (
+				772339C62B7595B500FCD882 /* Extensions */,
+				771F3A182B74430C009E3B13 /* Views */,
+				771F3A172B7442F8009E3B13 /* Entities */,
 				771F39C92B73E77D009E3B13 /* AppDelegate.swift */,
 				771F39CB2B73E77D009E3B13 /* SceneDelegate.swift */,
 				771F39CD2B73E77D009E3B13 /* ViewController.swift */,
@@ -121,6 +132,39 @@
 				771F3A162B74425B009E3B13 /* README.md */,
 			);
 			path = OrderApp;
+			sourceTree = "<group>";
+		};
+		771F3A172B7442F8009E3B13 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				772339C12B75419B00FCD882 /* Models */,
+				772339BF2B75410400FCD882 /* DBManager.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		771F3A182B74430C009E3B13 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				772339C42B75561300FCD882 /* CustomTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		772339C12B75419B00FCD882 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				772339C22B7541A700FCD882 /* Product.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		772339C62B7595B500FCD882 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				772339C72B7595C900FCD882 /* Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,9 +270,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				772339C52B75561300FCD882 /* CustomTableViewCell.swift in Sources */,
+				772339C02B75410400FCD882 /* DBManager.swift in Sources */,
 				771F39CE2B73E77D009E3B13 /* ViewController.swift in Sources */,
 				771F39CA2B73E77D009E3B13 /* AppDelegate.swift in Sources */,
 				771F39CC2B73E77D009E3B13 /* SceneDelegate.swift in Sources */,
+				772339C32B7541A700FCD882 /* Product.swift in Sources */,
+				772339C82B7595C900FCD882 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
