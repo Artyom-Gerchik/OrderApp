@@ -11,6 +11,32 @@ import UIKit
 class CustomTableViewCell: UITableViewCell {
     //let label = UILabel()
     
+//    @objc
+//    func buttonTapped() {
+//        UIView.animate(withDuration: 0.3) {
+//            self.cellButton.alpha = 0.5
+//            
+//            //let newViewController = OrderViewController()
+//            //navigationController
+//            
+//        }
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 ) {
+//            UIView.animate(withDuration: 0.3) {
+//                self.cellButton.alpha = 1.0
+//            }
+//        }
+//    }
+    var cellProductId: String?
+    var buyButtonAction : (() -> ())?
+    
+    @objc
+    func buyButtonTapped(_ sender: UIButton){
+        // if the closure is defined (not nil)
+        // then execute the code inside the subscribeButtonAction closure
+        buyButtonAction?()
+      }
+    
     
     // MARK: - Views
     
@@ -18,7 +44,7 @@ class CustomTableViewCell: UITableViewCell {
         let background = UIView()
         background.translatesAutoresizingMaskIntoConstraints = false
         background.layer.cornerRadius = 10
-        background.backgroundColor = .systemPink
+        background.backgroundColor = .lightGray
         return background
     }()
     
@@ -43,19 +69,21 @@ class CustomTableViewCell: UITableViewCell {
     private lazy var cellButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemGreen
-        button.setTitle("Buy", for: .normal)
+        button.backgroundColor = .gray
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(buttonTapped), for:.touchUpInside)
+        button.addTarget(self, action: #selector(buyButtonTapped(_:)), for: .touchUpInside)
+        button.layer.borderWidth = 1
+        button.setTitle("Details", for: .normal)
         return button
     }()
     
     private lazy var cellImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 1
         return imageView
     }()
     
@@ -93,7 +121,6 @@ class CustomTableViewCell: UITableViewCell {
     
     func setupUI() {
         
-        
         nameAndDescriptionVStack.addArrangedSubview(cellNameLabel)
         nameAndDescriptionVStack.addArrangedSubview(cellDescrtiptionLabel)
         
@@ -101,9 +128,10 @@ class CustomTableViewCell: UITableViewCell {
         contentHStack.addArrangedSubview(nameAndDescriptionVStack)
         contentHStack.addArrangedSubview(cellButton)
         
-        cellBackground.addSubview(contentHStack)
+        contentHStack.setCustomSpacing(10, after: cellImage)
+        contentHStack.setCustomSpacing(10, after: nameAndDescriptionVStack)
         
-        //contentView.backgroundColor = .systemMint
+        cellBackground.addSubview(contentHStack)
         contentView.addSubview(cellBackground)
         
         NSLayoutConstraint.activate([
@@ -118,14 +146,6 @@ class CustomTableViewCell: UITableViewCell {
             contentHStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             contentHStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             contentHStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            
-            
-//            cellButton.heightAnchor.constraint(equalToConstant: 100),
-//            cellButton.widthAnchor.constraint(equalToConstant: 50),
-//            cellButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-//            cellButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-
-            
         ])
     }
     
@@ -143,28 +163,7 @@ class CustomTableViewCell: UITableViewCell {
         cellImage.imageFrom(url: URL(string: URLStr)!)
     }
     
-    @objc
-    func buttonTapped() {
-        print(cellNameLabel.text!)
+    func bindCellProductId(to productId: String) {
+        cellProductId = productId
     }
-    
-    //    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    //        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    //        self.contentView.addSubview(label)
-    //
-    //        label.translatesAutoresizingMaskIntoConstraints = false
-    //        label.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
-    //        label.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-    //        label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
-    //        label.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
-    //    }
-    //
-    //    required init?(coder: NSCoder) {
-    //        fatalError("init(coder:) has not been implemented")
-    //    }
-    //
-    //    func configureWith(number: Int) {
-    //        label.text = String(number)
-    //    }
-    
 }
