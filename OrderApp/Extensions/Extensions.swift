@@ -10,25 +10,28 @@ import UIKit
 import MessageUI
 
 extension UIImageView{
+    
+    static let downloadSerialQueue = DispatchQueue(label: "MyQueue")
+    
     func imageFrom(url: URL, completion: @escaping (UIImage) -> ()) {
         let urlString = String(describing: url)
         let urlStringHash = String(Encoder().strHash(urlString))
         
-        DispatchQueue.global().async {
+        UIImageView.downloadSerialQueue.async {
             if let image = DBManager().getSavedImageLocally(hashURL: urlStringHash) {
-                DispatchQueue.main.async{
+                DispatchQueue.main.async {
                     completion(image)
                 }
             } else {
                 if let data = try? Data(contentsOf: url){
                     if let image = UIImage(data:data){
-                        DispatchQueue.main.async{
-                            if DBManager().saveImageLocally(image: image, hashURL: urlStringHash) {
+                        if DBManager().saveImageLocally(image: image, hashURL: urlStringHash) {
+                            DispatchQueue.main.async {
                                 completion(image)
-                                print("SAVED IMAGE! \(urlStringHash)")
-                            }else {
-                                print("FAILURED WHILE SAVING IMAGE")
                             }
+                            print("SAVED IMAGE! \(urlStringHash)")
+                        }else {
+                            print("FAILURED WHILE SAVING IMAGE")
                         }
                     }
                 }
@@ -67,7 +70,7 @@ extension UIViewController {
 
 // MARK: - TableView Delegates
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = DetailsViewController()

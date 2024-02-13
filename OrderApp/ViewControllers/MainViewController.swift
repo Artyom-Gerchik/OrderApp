@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  OrderApp
 //
 //  Created by Artyom on 7.02.24.
@@ -8,7 +8,7 @@
 import UIKit
 
 
-class ViewController: UIViewController {
+class MainViewController: UIViewController {
     
     // MARK: - Properties
     

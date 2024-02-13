@@ -102,11 +102,10 @@ class OrderViewController: UIViewController {
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
-        
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        
         setupUI()
         setupConstraints()
     }
@@ -116,15 +115,11 @@ class OrderViewController: UIViewController {
     func setupUI() {
         
         navigationItem.title = "Order details"
-        
         view.addSubview(nameLabel)
         view.addSubview(nameTextField)
-        
         view.addSubview(emailLabel)
         view.addSubview(emailTextField)
-        
         view.addSubview(buyButton)
-        
     }
     
     func setupConstraints() {

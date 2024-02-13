@@ -1,5 +1,5 @@
 //
-//  OrderViewController.swift
+//  DetailsViewController.swift
 //  OrderApp
 //
 //  Created by Artyom on 10.02.24.

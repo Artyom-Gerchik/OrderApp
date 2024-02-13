@@ -18,5 +18,4 @@ class Encoder {
         }
         return result
     }
-    
 }
