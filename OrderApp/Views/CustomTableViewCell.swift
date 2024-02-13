@@ -9,34 +9,11 @@ import Foundation
 import UIKit
 
 class CustomTableViewCell: UITableViewCell {
-    //let label = UILabel()
     
-//    @objc
-//    func buttonTapped() {
-//        UIView.animate(withDuration: 0.3) {
-//            self.cellButton.alpha = 0.5
-//            
-//            //let newViewController = OrderViewController()
-//            //navigationController
-//            
-//        }
-//        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 ) {
-//            UIView.animate(withDuration: 0.3) {
-//                self.cellButton.alpha = 1.0
-//            }
-//        }
-//    }
+    // MARK: - Properties
+    
     var cellProductId: String?
-    var buyButtonAction : (() -> ())?
-    
-    @objc
-    func buyButtonTapped(_ sender: UIButton){
-        // if the closure is defined (not nil)
-        // then execute the code inside the subscribeButtonAction closure
-        buyButtonAction?()
-      }
-    
+    var cellPhotoURL: String?
     
     // MARK: - Views
     
@@ -66,18 +43,6 @@ class CustomTableViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var cellButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .gray
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(buyButtonTapped(_:)), for: .touchUpInside)
-        button.layer.borderWidth = 1
-        button.setTitle("Details", for: .normal)
-        return button
-    }()
-    
     private lazy var cellImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -92,7 +57,7 @@ class CustomTableViewCell: UITableViewCell {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
-        stack.distribution = .fillEqually // Setting the distribution to fill based on the content
+        stack.distribution = .fillProportionally // Setting the distribution to fill based on the content
         return stack
     }()
     
@@ -117,6 +82,11 @@ class CustomTableViewCell: UITableViewCell {
         setupUI()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellPhotoURL = nil
+    }
+    
     // MARK: - SetupUI
     
     func setupUI() {
@@ -126,7 +96,6 @@ class CustomTableViewCell: UITableViewCell {
         
         contentHStack.addArrangedSubview(cellImage)
         contentHStack.addArrangedSubview(nameAndDescriptionVStack)
-        contentHStack.addArrangedSubview(cellButton)
         
         contentHStack.setCustomSpacing(10, after: cellImage)
         contentHStack.setCustomSpacing(10, after: nameAndDescriptionVStack)
@@ -137,6 +106,7 @@ class CustomTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             
             contentView.heightAnchor.constraint(equalToConstant: 100),
+            cellImage.widthAnchor.constraint(equalToConstant: 100),
             cellBackground.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             cellBackground.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             cellBackground.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -159,8 +129,14 @@ class CustomTableViewCell: UITableViewCell {
         cellDescrtiptionLabel.text = description
     }
     
-    func bindCellImageURL(to URLStr: String) {
-        cellImage.imageFrom(url: URL(string: URLStr)!)
+    func bindCellImageURL(to URLStr: String) { //add goods and prints
+        let url = URLStr
+        self.cellPhotoURL = URLStr
+        cellImage.imageFrom(url: URL(string: URLStr)!) { [weak self] image in
+            if url == self?.cellPhotoURL {
+                self?.cellImage.image = image
+            }
+        }
     }
     
     func bindCellProductId(to productId: String) {

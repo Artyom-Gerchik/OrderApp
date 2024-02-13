@@ -11,25 +11,56 @@ import FirebaseFirestore
 
 class DBManager {
     
-    let db = Firestore.firestore()
+    let remoteDB = Firestore.firestore()
     
     func getGoods() async -> Array<Product>{
-            
+        
         var goods = [Product]()
         
         do {
-          let querySnapshot = try await db.collection("goods").getDocuments()
-          for product in querySnapshot.documents {
-              goods.append(Product(id: String(product.documentID),
-                                   name: product.data()["name"] as! String,
-                                   description: product.data()["description"] as! String,
-                                   photoURL: product.data()["photoURL"] as! String,
-                                   price: product.data()["price"] as! Double))
-            //print("\(product.documentID) => \(product.data())") // usage - document.data()["name"]
-          }
+            let querySnapshot = try await remoteDB.collection("goods").getDocuments()
+            goods = querySnapshot.documents.compactMap { product in
+                return Product(dict: product.data(), id: product.documentID)
+            }
         } catch {
-          print("Error getting documents: \(error)")
+            print("Error getting documents: \(error)")
         }
         return goods
     }
+    
+    func createOrder(order: Order) {
+        let ordersRef = remoteDB.collection("orders")
+        
+        ordersRef.document(order.id).setData([
+            "clientEmail": order.clientEmail,
+            "clientName": order.clientName,
+            "clientId": order.clientId,
+            "productId": order.productId,
+            "orderDate": order.orderDateSTR
+        ])
+    }
+    
+    func saveImageLocally(image: UIImage, hashURL: String) -> Bool {
+        guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
+            return false
+        }
+        guard let directory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else {
+            return false
+        }
+        do {
+            try data.write(to: directory.appendingPathComponent("\(hashURL).png")!)
+            return true
+        } catch {
+            print(error.localizedDescription)
+            return false
+        }
+    }
+    
+    func getSavedImageLocally(hashURL: String) -> UIImage? {
+        if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
+            return UIImage(contentsOfFile: URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(hashURL).path)
+        }
+        return nil
+    }
+    
 }

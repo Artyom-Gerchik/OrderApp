@@ -16,18 +16,31 @@ class OrderViewController: UIViewController {
     
     @objc
     func buyButtonTapped(_ sender: UIButton){
-        //let vc = ViewController()
-        //self.navigationController?.pushViewController(vc, animated: true)
-        self.navigationController?.popToRootViewController(animated: true)
-        print(nameTextField.text!)
         
-        let alert = UIAlertController(title: "Ordered!", message: "Subscribed to \(youtuber)", preferredStyle: .alert)
-          let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-          alert.addAction(okAction)
-                
-          self.present(alert, animated: true, completion: nil)
-        
-        
+        if emailTextField.text?.isEmail == true {
+            
+            let date = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "d / MMM / YYYY, HH:mm:ss"
+            
+            let order = Order(id: UUID().uuidString, clientEmail: emailTextField.text!, clientName: nameTextField.text!, clientId: UUID().uuidString, productId: productToOrder!.id, orderDateSTR: dateFormatter.string(from: date))
+            
+            DBManager().createOrder(order: order)
+            
+            let alert = UIAlertController(title: "Ordered!", message: "Order number is: \(order.id)", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+            alert.addAction(okAction)
+            
+            self.present(alert, animated: true, completion: nil)
+            
+        } else {
+            let alert = UIAlertController(title: "Error!", message: "Wrong email!", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .destructive, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     // MARK: - Views
@@ -35,11 +48,10 @@ class OrderViewController: UIViewController {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = .boldSystemFont(ofSize: 18)
         label.textColor = .black
         label.text = "Name: "
-        label.bounds = CGRect(x: 0, y: 0, width: 10, height: 10)
         return label
     }()
     
@@ -49,13 +61,15 @@ class OrderViewController: UIViewController {
         nameTextField.textAlignment = .center
         nameTextField.layer.borderWidth = 1
         nameTextField.layer.cornerRadius = 10
+        nameTextField.autocorrectionType = .no
+        nameTextField.autocapitalizationType = .none
         return nameTextField
     }()
     
     private lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = .boldSystemFont(ofSize: 18)
         label.textColor = .black
         label.text = "Email: "
@@ -68,6 +82,8 @@ class OrderViewController: UIViewController {
         emailTextField.textAlignment = .center
         emailTextField.layer.borderWidth = 1
         emailTextField.layer.cornerRadius = 10
+        emailTextField.autocorrectionType = .no
+        emailTextField.autocapitalizationType = .none
         return emailTextField
     }()
     
@@ -83,66 +99,61 @@ class OrderViewController: UIViewController {
         return button
     }()
     
-    private lazy var VStack: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .vertical
-        stack.distribution = .fillEqually // Setting the distribution to fill based on the content
-        return stack
-    }()
-    
-    private lazy var HStackForName: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually // Setting the distribution to fill based on the content
-        return stack
-    }()
-    
-    private lazy var HStackForEmail: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually // Setting the distribution to fill based on the content
-        return stack
-    }()
-    
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
         
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         
-        HStackForName.addArrangedSubview(nameLabel)
-        HStackForName.addArrangedSubview(nameTextField)
-        
-        VStack.addArrangedSubview(HStackForName)
-        
-        HStackForEmail.addArrangedSubview(emailLabel)
-        HStackForEmail.addArrangedSubview(emailTextField)
-        
-        VStack.addArrangedSubview(HStackForEmail)
-        VStack.addArrangedSubview(buyButton)
-        
-        view.addSubview(VStack)
         setupUI()
+        setupConstraints()
     }
     
     // MARK: - SetupUI
     
     func setupUI() {
         
+        navigationItem.title = "Order details"
         
+        view.addSubview(nameLabel)
+        view.addSubview(nameTextField)
         
-        VStack.setCustomSpacing(10, after: HStackForName)
-        VStack.setCustomSpacing(50, after: HStackForEmail)
-        //
+        view.addSubview(emailLabel)
+        view.addSubview(emailTextField)
+        
+        view.addSubview(buyButton)
+        
+    }
+    
+    func setupConstraints() {
+        
         NSLayoutConstraint.activate([
-            VStack.topAnchor.constraint(equalTo: view.topAnchor),
-            VStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            VStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            VStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            //image.heightAnchor.constraint(equalToConstant: view.frame.width - 32),
+            
+            nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            nameLabel.bottomAnchor.constraint(equalTo: nameTextField.topAnchor, constant: -24),
+            
+            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            nameTextField.bottomAnchor.constraint(equalTo: emailLabel.topAnchor, constant: -24),
+            nameTextField.heightAnchor.constraint(equalToConstant: 50),
+            
+            emailLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emailLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emailLabel.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -24),
+            
+            emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            emailTextField.bottomAnchor.constraint(lessThanOrEqualTo: buyButton.topAnchor, constant: 20),
+            emailTextField.heightAnchor.constraint(equalToConstant: 50),
+            
+            buyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            buyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            buyButton.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
+            buyButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     

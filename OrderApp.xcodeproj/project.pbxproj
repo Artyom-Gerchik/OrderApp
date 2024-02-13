@@ -46,8 +46,8 @@
 		772339C82B7595C900FCD882 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 772339C72B7595C900FCD882 /* Extensions.swift */; };
 		77870B0F2B77B77A006A2468 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77870B0E2B77B77A006A2468 /* DetailsViewController.swift */; };
 		77870B112B79515B006A2468 /* OrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77870B102B79515B006A2468 /* OrderViewController.swift */; };
-		77870B142B796DC6006A2468 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77870B132B796DC6006A2468 /* Validator.swift */; };
 		77870B162B7A53A7006A2468 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77870B152B7A53A7006A2468 /* Order.swift */; };
+		77870B182B7A71D8006A2468 /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77870B172B7A71D8006A2468 /* Encoder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,8 +66,8 @@
 		772339C72B7595C900FCD882 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		77870B0E2B77B77A006A2468 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		77870B102B79515B006A2468 /* OrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewController.swift; sourceTree = "<group>"; };
-		77870B132B796DC6006A2468 /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		77870B152B7A53A7006A2468 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		77870B172B7A71D8006A2468 /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,7 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				772339BF2B75410400FCD882 /* DBManager.swift */,
-				77870B132B796DC6006A2468 /* Validator.swift */,
+				77870B172B7A71D8006A2468 /* Encoder.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -300,12 +300,12 @@
 			files = (
 				772339C52B75561300FCD882 /* CustomTableViewCell.swift in Sources */,
 				772339C02B75410400FCD882 /* DBManager.swift in Sources */,
-				77870B142B796DC6006A2468 /* Validator.swift in Sources */,
 				771F39CE2B73E77D009E3B13 /* ViewController.swift in Sources */,
 				77870B162B7A53A7006A2468 /* Order.swift in Sources */,
 				771F39CA2B73E77D009E3B13 /* AppDelegate.swift in Sources */,
 				771F39CC2B73E77D009E3B13 /* SceneDelegate.swift in Sources */,
 				772339C32B7541A700FCD882 /* Product.swift in Sources */,
+				77870B182B7A71D8006A2468 /* Encoder.swift in Sources */,
 				772339C82B7595C900FCD882 /* Extensions.swift in Sources */,
 				77870B0F2B77B77A006A2468 /* DetailsViewController.swift in Sources */,
 				77870B112B79515B006A2468 /* OrderViewController.swift in Sources */,

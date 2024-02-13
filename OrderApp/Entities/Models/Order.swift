@@ -10,14 +10,18 @@ import Foundation
 class Order {
     
     let id: String
+    let clientEmail: String
+    let clientName: String
     let clientId: String
     let productId: String
-    let orderDate: String
+    let orderDateSTR: String
     
-    init(id: String, clientId: String, productId: String, orderDate: String) {
+    init(id: String, clientEmail: String, clientName: String, clientId: String, productId: String, orderDateSTR: String) {
         self.id = id
+        self.clientEmail = clientEmail
+        self.clientName = clientName
         self.clientId = clientId
         self.productId = productId
-        self.orderDate = orderDate
+        self.orderDateSTR = orderDateSTR
     }
 }

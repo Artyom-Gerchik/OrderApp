@@ -7,14 +7,29 @@
 
 import Foundation
 import UIKit
+import MessageUI
 
 extension UIImageView{
-    func imageFrom(url:URL){
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url){
-                if let image = UIImage(data:data){
-                    DispatchQueue.main.async{
-                        self?.image = image
+    func imageFrom(url: URL, completion: @escaping (UIImage) -> ()) {
+        let urlString = String(describing: url)
+        let urlStringHash = String(Encoder().strHash(urlString))
+        
+        DispatchQueue.global().async {
+            if let image = DBManager().getSavedImageLocally(hashURL: urlStringHash) {
+                DispatchQueue.main.async{
+                    completion(image)
+                }
+            } else {
+                if let data = try? Data(contentsOf: url){
+                    if let image = UIImage(data:data){
+                        DispatchQueue.main.async{
+                            if DBManager().saveImageLocally(image: image, hashURL: urlStringHash) {
+                                completion(image)
+                                print("SAVED IMAGE! \(urlStringHash)")
+                            }else {
+                                print("FAILURED WHILE SAVING IMAGE")
+                            }
+                        }
                     }
                 }
             }
@@ -22,9 +37,43 @@ extension UIImageView{
     }
 }
 
+extension DetailsViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
+}
+
+extension String {
+    public var isEmail: Bool {
+        let dataDetector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        
+        let firstMatch = dataDetector?.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportCompletion, range: NSRange(location: 0, length: self.count))
+        
+        return (firstMatch?.range.location != NSNotFound && firstMatch?.url?.scheme == "mailto")
+    }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
 // MARK: - TableView Delegates
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = DetailsViewController()
+        vc.productToOrder = Product(id: goods[indexPath.item].id, name: goods[indexPath.item].name, description: goods[indexPath.item].description, photoURL: goods[indexPath.item].photoURL, price: goods[indexPath.item].price)
+        self.navigationController?.pushViewController(vc,animated:true)
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell") as! CustomTableViewCell
@@ -35,18 +84,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.bindCellImageURL(to: goods[indexPath.item].photoURL)
         cell.bindCellProductId(to: goods[indexPath.item].id)
         
-        cell.buyButtonAction = { [unowned self] in
-            let vc = DetailsViewController()
-            vc.productToOrder = Product(id: goods[indexPath.item].id, name: goods[indexPath.item].name, description: goods[indexPath.item].description, photoURL: goods[indexPath.item].photoURL, price: goods[indexPath.item].price)
-            self.navigationController?.pushViewController(vc,animated:true)
-        }
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(goods.count != 0){
-            //print("I AM HERE")
+            // here you can stop the spinner, to tell that download is completed
         }
         return goods.count
     }
